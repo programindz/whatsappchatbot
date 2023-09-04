@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Form, Request
 from utils import send_message
-from model import response_from_model
+from models import response_from_model
 
 app = FastAPI()
 
