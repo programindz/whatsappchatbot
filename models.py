@@ -1,15 +1,19 @@
 import os
 from langchain import PromptTemplate, HuggingFaceHub, LLMChain
-from langchain.chains import ConversationChain
-from langchain.chains.conversation.memory import ConversationBufferMemory
 
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.getenv('HuggingFaceHub')
-llm = HuggingFaceHub(repo_id="tiiuae/falcon-7b-instruct", model_kwargs={"temperature": 0.5})
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = os.getenv(f"{HuggingFaceHub}")
+llm = HuggingFaceHub(repo_id="google/flan-t5-large", model_kwargs={"temperature": 0.5})
 
-conversation = ConversationChain(
-    llm=llm,
-    memory=ConversationBufferMemory()
-)
+prompt = PromptTemplate(
+	input_variables=['input'],
+	template= """
+	human: {input}
+	ai assistant: 
+	 """
+	)
 
+chain = LLMChain(prompt = prompt, llm = llm)
 def response_from_model(text):
-	return conversation.predict(input=text)
+	res = chain.predict(input=text)
+	print(res)
+	return res
